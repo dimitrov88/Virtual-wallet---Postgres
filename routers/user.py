@@ -30,7 +30,7 @@ def register():
 
         hash_and_salted_password = generate_password_hash(
             form.password.data,
-            method=os.environ.get("PASS_METHOD"),
+            method="pbkdf2:sha256",
             salt_length=8
         )
         try:
