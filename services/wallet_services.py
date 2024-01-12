@@ -11,12 +11,9 @@ def create_first_wallet(wallet: Wallet, user_name):
     new_wallet = insert_query1("INSERT INTO \"walletdb\".\"wallet\" (name, balance, currency_id, user_id) VALUES (%s, %s, %s, %s)",
                               (wallet.name, wallet.balance, 1, temp_user.id))
 
-    print(new_wallet)
     data2 = read_query("SELECT * FROM \"walletdb\".\"wallet\" WHERE id = %s", (new_wallet,))
-    print(data2)
     temp_wallet = next((Wallet.from_query(*row) for row in data2), None)
-    print(temp_wallet)
-    print(temp_user)
+
     result = insert_query("INSERT INTO \"walletdb\".\"wallet_access\" (wallet_id, user_id, spend_access, add_access) VALUES(%s,%s,%s,%s)"
                           , (temp_wallet.id, temp_user.id, True, True))
     return result
@@ -111,7 +108,7 @@ def make_transaction(sender: Union[Wallet, WalletResponse], receiver: Union[Wall
     to_add = receiver.balance + receiver_amount
     send = update_query("UPDATE \"walletdb\".\"wallet\" SET balance = %s WHERE id = %s", (to_remove, sender.id))
     add = update_query("UPDATE \"walletdb\".\"wallet\" SET balance = %s WHERE id = %s", (to_add, receiver.id))
-    transaction = insert_query1("INSERT INTO transaction (sender_id, receiver_id, amount, currency_id) VALUES(%s,%s,%s,%s)",
+    transaction = insert_query1("INSERT INTO \"walletdb\".\"transaction\" (sender_id, receiver_id, amount, currency_id) VALUES(%s,%s,%s,%s)",
                                (sender.user_id, receiver.user_id, receiver_amount, receiver.currency_id))
     if sender.user_id != current_user.id:
         transaction2 = insert_query1(
