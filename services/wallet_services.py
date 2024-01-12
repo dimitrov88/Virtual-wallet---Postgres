@@ -111,7 +111,7 @@ def make_transaction(sender: Union[Wallet, WalletResponse], receiver: Union[Wall
     to_add = receiver.balance + receiver_amount
     send = update_query("UPDATE \"walletdb\".\"wallet\" SET balance = %s WHERE id = %s", (to_remove, sender.id))
     add = update_query("UPDATE \"walletdb\".\"wallet\" SET balance = %s WHERE id = %s", (to_add, receiver.id))
-    transaction = insert_query("INSERT INTO transaction (sender_id, receiver_id, amount, currency_id) VALUES(%s,%s,%s,%s)",
+    transaction = insert_query1("INSERT INTO transaction (sender_id, receiver_id, amount, currency_id) VALUES(%s,%s,%s,%s)",
                                (sender.user_id, receiver.user_id, receiver_amount, receiver.currency_id))
     if sender.user_id != current_user.id:
         transaction2 = insert_query1(
