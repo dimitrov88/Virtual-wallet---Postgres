@@ -78,7 +78,7 @@ def get_all_by_access(user_id):
 
 
 def add_access(wallet_id, user_id):
-    data = insert_query1("INSERT INTO \"walletdb\".\"wallet_access\" (wallet_id, user_id, spend_access, add_access) VALUES(%s, %s, %s, %s)",
+    data = insert_query("INSERT INTO \"walletdb\".\"wallet_access\" (wallet_id, user_id, spend_access, add_access) VALUES(%s, %s, %s, %s)",
                         (wallet_id, user_id, True, True))
 
 
