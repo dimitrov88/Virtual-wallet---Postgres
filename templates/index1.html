@@ -1,0 +1,97 @@
+{% include "header.html" %}
+
+<!-- Page Header-->
+<header
+  class="masthead"
+  style="background-image: url('../static/assets/img/home.jpg')"
+>
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="site-heading">
+          <h1>{{ wallet.balance}}  {{ wallet.currency }}</h1>
+          <span class="subheading">{{ wallet.name }}</span>
+            <a class="btn btn-primary float-right"
+             href="{{url_for('view_wallets.view_wallets')}}"
+            > My Wallets →</a>
+            <a class="btn btn-secondary text-uppercase"
+               href="{{ url_for('add_money.add_money') }}">Add money →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Main Content-->
+<div class="container px-4 px-lg-5">
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      {% for message in messages %}
+      <p class="flash">{{ message }}</p>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+
+  <div class="row gx-4 gx-lg-5 justify-content-center">
+    <div class="col-md-10 col-lg-8 col-xl-7">
+      <!-- Transaction preview-->
+<div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
+    <div class="d-flex justify-content-end mb-4">
+        <a class="btn btn-primary float-right"
+          href="{{url_for('create_transaction.create_transaction', current_wallet_id=wallet.id)}}"
+          >Create Transaction →</a>
+
+        <a class="btn btn-secondary text-uppercase" href="{{ url_for('my_contacts.my_contacts')}}">Send money to a friend →</a>
+    </div>
+
+      <div class="d-flex justify-content-end mb-4">
+          <a class="btn btn-primary float-right"
+          href="{{ url_for('create_wallet.create_wallet') }}"
+          >Create Wallet →</a>
+        <a class="btn btn-secondary text-uppercase" href="{{ url_for('wallet_access.wallet_access')}}">Manage wallet access →</a>
+      </div>
+    <div class="datatable-top">
+
+</div>
+<form method="get" action="{{ url_for('home.home') }}" class="form-inline">
+    <div class="form-group mb-2">
+        <label for="search" class="sr-only">Search</label>
+        <input type="text" class="form-control" id="search" name="search" placeholder="Search">
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Search for name</button>
+    <div class="datatable-dropdown">
+        <label>
+            <select class="datatable-selector"><option value="5">5</option><option value="10" selected="">10</option>
+                <option value="15">15</option><option value="20">20</option><option value="25">25</option>
+            </select> entries per page
+        </label>
+    </div>
+</form>
+<div class="datatable-container">
+    <table id="datatablesSimple" class="datatable-table">
+        <thead>
+        <tr style="background-color: #e0e0e0;">
+
+            <th data-sortable="true" style="width: 18.067978533094813%;"><a href="#" class="datatable-sorter">Sender</a></th>
+            <th data-sortable="true" style="width: 24.686940966010734%;"><a href="#" class="datatable-sorter">Receiver</a></th>
+            <th data-sortable="true" style="width: 15.56350626118068%;">
+                <a href="{{ url_for('home_amount.home_amount', amount=('DESC' if request.args['amount']=='ASC' else 'ASC')) }}">Amount</a></th>
+            <th data-sortable="true" style="width: 10.554561717352415%;"><a href="#" class="datatable-sorter">Currency</a></th>
+            <th data-sortable="true" style="width: 16.27906976744186%;">
+            <a href="{{ url_for('home.home', date=('DESC' if request.args['date']=='ASC' else 'ASC')) }}">Start date</a></th>
+            <th data-sortable="true" style="width: 14.847942754919499%;"><a href="#" class="datatable-sorter">Category</a></th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for t in transactions%}
+        <tr data-index="0"><td>{{t.sender}}</td><td>{{t.receiver}}</td><td>{{t.amount}}</td><td>{{t.currency}}</td><td>{{t.date}}</td><td>#</td></tr>
+        {%endfor%}
+        </tbody>
+    </table>
+</div>
+    </div>
+  </div>
+</div>
+
+{% include "footer.html" %}

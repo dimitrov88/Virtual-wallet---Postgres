@@ -1,0 +1,64 @@
+{% include "header.html" %}
+
+<!-- Page Header-->
+<header
+  class="masthead"
+  style="background-image: url('../static/assets/img/friends.jpg')"
+>
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="site-heading">
+          <h1>{{ current_user.name }}'s Contacts</h1>
+          <span class="subheading">A collection of all contacts.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- Main Content-->
+<div class="container px-4 px-lg-5">
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      {% for message in messages %}
+      <p class="flash">{{ message }}</p>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+  <div class="row gx-4 gx-lg-5 justify-content-center">
+    <div class="col-md-10 col-lg-8 col-xl-7">
+      <!-- Post preview-->
+      {% for contact in contacts %}
+      <div class="post-preview">
+        <a href="{{ url_for('send_to_friend.send_to_friend', contact_id=contact.id) }}">
+          <h2 class="post-title">{{ contact.name }}</h2>
+          <h3 class="post-subtitle">{{ contact.email }}</h3>
+        </a>
+        <p class="post-meta">
+          <!-- Only show delete button if user id is 1 (admin user) -->
+          <a href="{{url_for('remove_contact.remove_contact', contact_id=contact.id) }}">✘</a>
+        </p>
+      </div>
+      <!-- Divider-->
+      <hr class="my-4" />
+      {% endfor %}
+
+      <!-- New Post -->
+      <!-- Only show Create Post button if user id is 1 (admin user) -->
+      <div class="d-flex justify-content-end mb-4">
+        <a
+          class="btn btn-primary float-right"
+          href="{{url_for('add_contact.add_contact')}}"
+          >Add a contact</a
+        >
+      </div>
+
+      <!-- Pager-->
+<!--      <div class="d-flex justify-content-end mb-4">-->
+<!--        <a class="btn btn-secondary text-uppercase" href="#!">Older Posts →</a>-->
+<!--      </div>-->
+    </div>
+  </div>
+</div>
+
+{% include "footer.html" %}

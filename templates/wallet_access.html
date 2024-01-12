@@ -1,0 +1,63 @@
+{% include "header.html" %}
+
+<!-- Page Header-->
+<header
+  class="masthead"
+  style="background-image: url('../static/assets/img/send_to_friend.jpg')"
+>
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="site-heading">
+          <h1>{{ current_user.name }}'s Wallets Access</h1>
+          <span class="subheading">Manage your wallets.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- Main Content-->
+<div class="container px-4 px-lg-5">
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      {% for message in messages %}
+      <p class="flash">{{ message }}</p>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+  <div class="row gx-4 gx-lg-5 justify-content-center">
+    <div class="col-md-10 col-lg-8 col-xl-7">
+      <!-- Post preview-->
+      {% for wallet in wallets %}
+      <div class="post-preview">
+        <a href=#>
+          <h2 class="post-title">{{ wallet.user }} has access to {{ wallet.name }} wallet.</h2>
+          <h3 class="post-subtitle"></h3>
+        </a>
+        <p class="post-meta">
+          <a href="{{url_for('remove_wallet_access.remove_wallet_access', wallet_id=wallet.id, user_name=wallet.user)}}">✘</a>
+        </p>
+      </div>
+      <!-- Divider-->
+      <hr class="my-4" />
+      {% endfor %}
+
+      <!-- New Post -->
+      <!-- Only show Create Post button if user id is 1 (admin user) -->
+      <div class="d-flex justify-content-end mb-4">
+        <a
+          class="btn btn-primary float-right"
+          href="{{url_for('add_wallet_access.add_wallet_access')}}"
+          >Give access</a
+        >
+      </div>
+
+      <!-- Pager-->
+<!--      <div class="d-flex justify-content-end mb-4">-->
+<!--        <a class="btn btn-secondary text-uppercase" href="#">Older Posts →</a>-->
+<!--      </div>-->
+    </div>
+  </div>
+</div>
+
+{% include "footer.html" %}
