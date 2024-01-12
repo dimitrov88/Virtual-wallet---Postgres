@@ -38,7 +38,7 @@ def get_by_user_name(name):
     data = read_query("SELECT w.id, w.name, w.balance, c.name, u.name FROM \"walletdb\".\"wallet\" w "
                       "JOIN \"walletdb\".\"user\" u on w.user_id = u.id "
                       "JOIN \"walletdb\".\"currency\" c on c.id = w.currency_id "
-                      "WHERE u.name=%s", (name,))
+                      "WHERE u.name=%s ORDER BY w.id", (name,))
 
     return next((WalletResponse.from_query(*row) for row in data), None)
 
