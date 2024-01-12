@@ -78,7 +78,7 @@ def get_all_by_access(user_id):
 
 
 def add_access(wallet_id, user_id):
-    data = insert_query("INSERT INTO \"walletdb\".\"wallet_access\" (wallet_id, user_id, spend_access, add_access) VALUES(%s, %s, %s, %s)",
+    data = insert_query1("INSERT INTO \"walletdb\".\"wallet_access\" (wallet_id, user_id, spend_access, add_access) VALUES(%s, %s, %s, %s)",
                         (wallet_id, user_id, True, True))
 
 
@@ -114,11 +114,11 @@ def make_transaction(sender: Union[Wallet, WalletResponse], receiver: Union[Wall
     transaction = insert_query("INSERT INTO transaction (sender_id, receiver_id, amount, currency_id) VALUES(%s,%s,%s,%s)",
                                (sender.user_id, receiver.user_id, receiver_amount, receiver.currency_id))
     if sender.user_id != current_user.id:
-        transaction2 = insert_query(
+        transaction2 = insert_query1(
             "INSERT INTO \"walletdb\".\"transaction\" (sender_id, receiver_id, amount, currency_id) VALUES(%s,%s,%s,%s)",
             (current_user.id, receiver.user_id, receiver_amount, receiver.currency_id))
 
-    wallet_action = insert_query(
+    wallet_action = insert_query1(
         "INSERT INTO \"walletdb\".\"wallet_transaction\" (wallet_id1, wallet_id2, transaction_id) VALUES(%s,%s,%s)",
         (sender.id, receiver.id, transaction))
 
@@ -154,7 +154,7 @@ def add_from_card(wallet, amount):
 
 
 def create_wallet(wallet: Wallet):
-    data = insert_query("INSERT INTO \"walletdb\".\"wallet\" (name, balance, currency_id, user_id) VALUES(%s,%s,%s, %s)",
+    data = insert_query1("INSERT INTO \"walletdb\".\"wallet\" (name, balance, currency_id, user_id) VALUES(%s,%s,%s, %s)",
                         (wallet.name, wallet.balance, wallet.currency_id, wallet.user_id))
 
     access = insert_query("INSERT INTO \"walletdb\".\"wallet_access\" (wallet_id, user_id, spend_access, add_access) VALUES(%s,%s,%s,%s)",
