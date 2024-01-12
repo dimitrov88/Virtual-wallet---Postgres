@@ -115,7 +115,7 @@ def make_transaction(sender: Union[Wallet, WalletResponse], receiver: Union[Wall
             "INSERT INTO \"walletdb\".\"transaction\" (sender_id, receiver_id, amount, currency_id) VALUES(%s,%s,%s,%s)",
             (current_user.id, receiver.user_id, receiver_amount, receiver.currency_id))
 
-    wallet_action = insert_query1(
+    wallet_action = insert_query(
         "INSERT INTO \"walletdb\".\"wallet_transaction\" (wallet_id1, wallet_id2, transaction_id) VALUES(%s,%s,%s)",
         (sender.id, receiver.id, transaction))
 
@@ -123,7 +123,6 @@ def make_transaction(sender: Union[Wallet, WalletResponse], receiver: Union[Wall
 
 
 def get_all_wallets(user_id):
-    print(user_id)
     data = read_query("SELECT w.id, w.name, w.balance, w.currency_id, w.user_id FROM \"walletdb\".\"wallet\" w "
                       "JOIN \"walletdb\".\"wallet_access\" wa on w.id = wa.wallet_id "
                       "WHERE wa.user_id = %s AND wa.spend_access = %s AND wa.add_access = %s", (user_id, True, True))
